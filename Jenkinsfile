@@ -20,16 +20,18 @@ pipeline {
             }
         }
 
-        stage('Authenticate with GCP') {
-            steps {
-                script {
-                    // Authenticate with GCP using the service account key
-                    sh 'gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}'
-                    sh 'gcloud config set project ${GKE_PROJECT_ID}'
-                    sh 'gcloud config set compute/zone ${GKE_ZONE}'
-                }
+       stage('Authenticate with GCP') {
+    steps {
+        withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+            script {
+                sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+                sh "gcloud config set project ${GKE_PROJECT_ID}"
+                sh "gcloud config set compute/zone ${GKE_ZONE}"
             }
         }
+    }
+}
+
 
         stage('Configure kubectl') {
             steps {

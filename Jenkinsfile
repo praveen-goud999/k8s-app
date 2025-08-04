@@ -20,7 +20,6 @@ pipeline {
             }
         }
 
-       stage('Authenticate with GCP') {
     stage('Authenticate with GCP') {
     steps {
         withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
